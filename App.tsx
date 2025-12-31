@@ -3,7 +3,8 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "./components/LoginPage";
 import Dashboard from "./components/Dashboard";
 import AccountsView from "./components/AccountsView";
-import StudentsView from "./components/StudentsView";
+// import StudentsView from "./components/StudentsView";
+import StudentsPage from "./pages/StudentsPage";
 import StaffView from "./components/StaffView";
 import PaymentsView from "./components/PaymentsView";
 import RolesPermissionsView from "./components/RolesPermissionsView";
@@ -62,7 +63,7 @@ const App: React.FC = () => {
         >
           <Route index element={<DashboardHome />} />
           <Route path="admin" element={<AccountsPage />} />
-          <Route path="students" element={<StudentsView />} />
+          <Route path="students" element={<StudentsPage />} />
           <Route path="staff" element={<StaffView />} />
           <Route path="payments" element={<PaymentsView />} />
           <Route path="roles" element={<RolesPermissionsView />} />

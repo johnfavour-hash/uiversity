@@ -1,22 +1,25 @@
+import React, { useEffect, useState } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
+import LoginPage from "./components/LoginPage";
+import Dashboard from "./components/Dashboard";
+import AccountsView from "./components/AccountsView";
+import StudentsView from "./components/StudentsView";
+import StaffView from "./components/StaffView";
+import PaymentsView from "./components/PaymentsView";
+import RolesPermissionsView from "./components/RolesPermissionsView";
+import AnnouncementsView from "./components/AnnouncementsView";
+import AccountsPage from "./pages/AccountPage";
+import SettingsView from "./components/SettingsView";
+import { UserSession } from "./types";
+import DashboardHome from "./components/DashboardHome";
 
-import React, { useEffect, useState } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
-import LoginPage from './components/LoginPage';
-import Dashboard from './components/Dashboard';
-import AccountsView from './components/AccountsView';
-import StudentsView from './components/StudentsView';
-import StaffView from './components/StaffView';
-import PaymentsView from './components/PaymentsView';
-import RolesPermissionsView from './components/RolesPermissionsView';
-import AnnouncementsView from './components/AnnouncementsView';
-import SettingsView from './components/SettingsView';
-import { UserSession } from './types';
-import DashboardHome from './components/DashboardHome';
-
-const SESSION_KEY = 'u_university_session';
+const SESSION_KEY = "u_university_session";
 
 const App: React.FC = () => {
-  const [session, setSession] = useState<UserSession>({ username: '', isLoggedIn: false });
+  const [session, setSession] = useState<UserSession>({
+    username: "",
+    isLoggedIn: false,
+  });
 
   useEffect(() => {
     // Load persisted session if present
@@ -38,7 +41,7 @@ const App: React.FC = () => {
   };
 
   const handleLogout = () => {
-    setSession({ username: '', isLoggedIn: false });
+    setSession({ username: "", isLoggedIn: false });
     localStorage.removeItem(SESSION_KEY);
   };
 
@@ -58,7 +61,7 @@ const App: React.FC = () => {
           }
         >
           <Route index element={<DashboardHome />} />
-          <Route path="admin" element={<AccountsView />} />
+          <Route path="admin" element={<AccountsPage />} />
           <Route path="students" element={<StudentsView />} />
           <Route path="staff" element={<StaffView />} />
           <Route path="payments" element={<PaymentsView />} />
@@ -67,7 +70,15 @@ const App: React.FC = () => {
           <Route path="settings" element={<SettingsView />} />
         </Route>
 
-        <Route path="/" element={<Navigate to={session.isLoggedIn ? '/dashboard' : '/login'} replace />} />
+        <Route
+          path="/"
+          element={
+            <Navigate
+              to={session.isLoggedIn ? "/dashboard" : "/login"}
+              replace
+            />
+          }
+        />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </div>

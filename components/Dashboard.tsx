@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { 
   LogOut, 
   LayoutDashboard, 
@@ -20,13 +21,7 @@ import {
   X
 } from 'lucide-react';
 import ChatBot from './ChatBot';
-import AccountsView from './AccountsView';
-import StudentsView from './StudentsView';
-import StaffView from './StaffView';
-import PaymentsView from './PaymentsView';
-import RolesPermissionsView from './RolesPermissionsView';
-import AnnouncementsView from './AnnouncementsView';
-import SettingsView from './SettingsView';
+
 
 interface DashboardProps {
   username: string;
@@ -68,37 +63,31 @@ const SimpleLineChart = ({ data, color, height = 200, max = 100 }: { data: numbe
 };
 
 const Dashboard: React.FC<DashboardProps> = ({ username, onLogout }) => {
-  const [activeTab, setActiveTab] = useState('Dashboard');
   const [showChat, setShowChat] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const navItems = [
-    { name: 'Dashboard', icon: LayoutDashboard },
-    { name: 'Admin', icon: Building2 },
-    { name: 'Staff', icon: Users },
-    { name: 'Students', icon: GraduationCap },
-    { name: 'Payments', icon: CreditCard },
-    { name: 'Roles & Permissions', icon: ShieldCheck },
-    { name: 'Announcements', icon: Megaphone },
-    { name: 'Settings', icon: Settings },
+    { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
+    { name: 'Admin', path: '/dashboard/admin', icon: Building2 },
+    { name: 'Staff', path: '/dashboard/staff', icon: Users },
+    { name: 'Students', path: '/dashboard/students', icon: GraduationCap },
+    { name: 'Payments', path: '/dashboard/payments', icon: CreditCard },
+    { name: 'Roles & Permissions', path: '/dashboard/roles', icon: ShieldCheck },
+    { name: 'Announcements', path: '/dashboard/announcements', icon: Megaphone },
+    { name: 'Settings', path: '/dashboard/settings', icon: Settings },
   ];
 
-  const handleNavClick = (name: string) => {
-    setActiveTab(name);
+  const isActive = (path: string) => location.pathname === path || location.pathname.startsWith(path + '/');
+
+  const goToAnnouncements = () => {
     setIsSidebarOpen(false);
+    navigate('/dashboard/announcements');
   };
 
-  const renderContent = () => {
-    if (activeTab === 'Admin') return <AccountsView />;
-    if (activeTab === 'Students') return <StudentsView />;
-    if (activeTab === 'Staff') return <StaffView />;
-    if (activeTab === 'Payments') return <PaymentsView />;
-    if (activeTab === 'Roles & Permissions') return <RolesPermissionsView />;
-    if (activeTab === 'Announcements') return <AnnouncementsView />;
-    if (activeTab === 'Settings') return <SettingsView />;
+  // The dashboard's main content is rendered by nested routes via <Outlet />
 
-    return (
-      <div className="space-y-6 md:space-y-8 animate-in fade-in duration-500">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           <div className="bg-[#fff7ed] p-5 md:p-6 rounded-[1.5rem] md:rounded-[2rem] border border-orange-100 flex items-center gap-4 md:gap-6 shadow-sm transition-transform hover:scale-[1.02]">
             <div className="p-3 md:p-4 bg-white/50 rounded-2xl">
@@ -146,7 +135,7 @@ const Dashboard: React.FC<DashboardProps> = ({ username, onLogout }) => {
             <div className="flex flex-wrap justify-between items-center mb-6 gap-4">
               <h3 className="text-base md:text-lg font-bold text-slate-900">Announcements</h3>
               <button 
-                onClick={() => setActiveTab('Announcements')}
+                onClick={() => goToAnnouncements()}
                 className="bg-blue-600 text-white px-3 py-1.5 rounded-lg text-[10px] md:text-xs font-bold whitespace-nowrap"
               >
                 + New Note
@@ -208,18 +197,19 @@ const Dashboard: React.FC<DashboardProps> = ({ username, onLogout }) => {
 
         <nav className="flex-1 px-4 py-4 space-y-1 overflow-y-auto">
           {navItems.map((item) => (
-            <button
+            <NavLink
               key={item.name}
-              onClick={() => handleNavClick(item.name)}
+              to={item.path}
+              onClick={() => setIsSidebarOpen(false)}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group ${
-                activeTab === item.name 
+                isActive(item.path) 
                 ? 'bg-blue-50 text-blue-600 shadow-sm' 
                 : 'text-slate-500 hover:bg-slate-50 hover:text-slate-800'
               }`}
             >
-              <item.icon className={`w-5 h-5 ${activeTab === item.name ? 'text-blue-600' : 'text-slate-400 group-hover:text-slate-600'}`} />
+              <item.icon className={`w-5 h-5 ${isActive(item.path) ? 'text-blue-600' : 'text-slate-400 group-hover:text-slate-600'}`} />
               <span className="text-sm font-semibold">{item.name}</span>
-            </button>
+            </NavLink>
           ))}
         </nav>
 
@@ -260,7 +250,7 @@ const Dashboard: React.FC<DashboardProps> = ({ username, onLogout }) => {
           <div className="flex items-center gap-3 md:gap-6">
             <div className="hidden sm:flex items-center gap-2">
               <button 
-                onClick={() => setActiveTab('Announcements')}
+                onClick={() => navigate('/dashboard/announcements')}
                 className="p-2 text-slate-400 hover:text-blue-600 transition-colors"
                 title="Notifications"
               >
@@ -272,7 +262,7 @@ const Dashboard: React.FC<DashboardProps> = ({ username, onLogout }) => {
             </div>
             
             <button 
-              onClick={() => setActiveTab('Settings')}
+              onClick={() => navigate('/dashboard/settings')}
               className="flex items-center gap-2 md:gap-3 border-l border-slate-200 pl-3 md:pl-6 group transition-all"
             >
               <div className="text-right hidden sm:block">
@@ -287,7 +277,7 @@ const Dashboard: React.FC<DashboardProps> = ({ username, onLogout }) => {
         </header>
 
         <main className="flex-1 overflow-y-auto p-4 md:p-8">
-           {renderContent()}
+          <Outlet />
         </main>
 
         <button 

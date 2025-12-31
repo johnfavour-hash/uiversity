@@ -1,8 +1,16 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, Sparkles, User, Bot, Loader2, X } from 'lucide-react';
-import { getStudyBuddyResponse } from '../services/gemini';
 import { Message } from '../types';
+
+const fetchLocalResponse = async (history: Message[], userInput: string) => {
+  // Simple local/stub response (no external services)
+  const text = userInput.toLowerCase();
+  if (text.includes('help')) {
+    return 'Try breaking topics into smaller parts, make concise notes, and test yourself regularly.';
+  }
+  return "Thanks for your question — here's a quick study tip: review material actively with short, focused sessions and test yourself regularly.";
+};
 
 interface ChatBotProps {
   onClose?: () => void;
@@ -33,7 +41,7 @@ const ChatBot: React.FC<ChatBotProps> = ({ onClose }) => {
     setMessages(prev => [...prev, { role: 'user', text: userMessage }]);
     setIsLoading(true);
 
-    const response = await getStudyBuddyResponse(messages, userMessage);
+    const response = await fetchLocalResponse(messages, userMessage);
     setMessages(prev => [...prev, { role: 'model', text: response }]);
     setIsLoading(false);
   };
@@ -47,7 +55,7 @@ const ChatBot: React.FC<ChatBotProps> = ({ onClose }) => {
             <Sparkles className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h3 className="font-bold text-base">Study Buddy AI</h3>
+            <h3 className="font-bold text-base">Study Buddy</h3>
             <p className="text-[10px] text-blue-300 uppercase tracking-widest font-bold">Academic Assistant</p>
           </div>
         </div>
@@ -115,7 +123,7 @@ const ChatBot: React.FC<ChatBotProps> = ({ onClose }) => {
           </button>
         </form>
         <p className="text-[10px] text-slate-400 text-center mt-4 font-medium uppercase tracking-widest">
-          Gemini Flash Powered Assistant
+          Study Buddy
         </p>
       </div>
     </div>

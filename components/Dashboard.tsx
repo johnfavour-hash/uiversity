@@ -296,7 +296,7 @@ const Dashboard: React.FC<DashboardProps> = ({ username, onLogout }) => {
         >
           {showChat ? <LogOut className="w-5 h-5 md:w-6 md:h-6 rotate-90" /> : <MessageSquareText className="w-5 h-5 md:w-6 md:h-6" />}
           <div className="absolute right-full mr-4 bg-white text-slate-900 px-4 py-2 rounded-xl text-xs font-bold shadow-lg border border-slate-100 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none hidden md:block">
-            {showChat ? 'Close Tutor' : 'Open AI Tutor'}
+            {showChat ? 'Close Tutor' : 'Open Tutor'}
           </div>
         </button>
 

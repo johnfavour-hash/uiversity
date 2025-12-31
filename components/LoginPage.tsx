@@ -2,8 +2,10 @@
 import React, { useState } from 'react';
 import { User, Eye, EyeOff, GraduationCap } from 'lucide-react';
 
+import { useNavigate } from 'react-router-dom';
+
 interface LoginPageProps {
-  onLogin: (username: string) => void;
+  onLogin: (username: string, remember?: boolean) => void;
 }
 
 const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
@@ -12,10 +14,13 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
 
+  const navigate = useNavigate();
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (username.trim()) {
-      onLogin(username);
+      onLogin(username, rememberMe);
+      navigate('/dashboard');
     }
   };
 

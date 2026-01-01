@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import { Search, Plus, FileUp, Filter } from "lucide-react";
 import CreateStudentModal from "../components/CreateStudentModal";
+import StudentsTable from "../components/StudentsTable";
 
 const StudentsView: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -34,7 +35,7 @@ const StudentsView: React.FC = () => {
       </div>
 
       {/* Table code goes here... */}
-
+      <StudentsTable />
       {isModalOpen && (
         <CreateStudentModal
           onClose={() => setIsModalOpen(false)}
